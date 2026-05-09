@@ -12,7 +12,7 @@ class QuestionInline(admin.StackedInline):
     model = Question
     extra = 2
 
-class QuestionAdmin(admin.modelAdmin):
+class QuestionAdmin(admin.odelAdmin):
     inlines = [ChoiceInline]
     list_display = ['content']
 
