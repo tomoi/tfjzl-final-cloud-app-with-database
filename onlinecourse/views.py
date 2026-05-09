@@ -107,12 +107,11 @@ def submit(request, course_id):
     user = request.user
     enrollment = Enrollment.objects.get(user=user, course=course)
     submission = Submission.objects.create(enrollment=enrollment)
-
     choices = extract_answers(request)
     submission.choices.set(choices)
     submission_id = submission.id
+    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course_id, submission_id,)))
 
-    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course_id, submission_id)))
 
 # <HINT> Create a submit view to create an exam submission record for a course enrollment,
 # you may implement it based on following logic:
@@ -141,10 +140,11 @@ def extract_answers(request):
         # Get the selected choice ids from the submission record
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
+
 def show_exam_result(request, course_id, submission_id):
     context = {}
     course = get_object_or_404(Course, pk=course_id)
-    submission = MODEL2.objects.get(id=submission_id)
+    submission = Submission.objects.get(id=submission_id)
     choices = submission.choices.all()
 
     total_score = 0
@@ -163,5 +163,6 @@ def show_exam_result(request, course_id, submission_id):
     context['choices'] = choices
 
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
+
 
 
